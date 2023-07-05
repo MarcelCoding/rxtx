@@ -132,4 +132,6 @@ public final class DriverManager {
             }
         }
     }
+
+ public void refreshDrivers() {loadDrivers()}
 }
