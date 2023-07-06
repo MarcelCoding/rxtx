@@ -22,6 +22,8 @@
                 <include>gnu.io.rxtx:rxtxSerial-windows-x86</include>
                 <include>gnu.io.rxtx:rxtxSerial-windows-x86_64</include>
                 <include>gnu.io.rxtx:librxtxSerial-osx-x86_64</include>
+                <include>gnu.io.rxtx:librxtxSerial-linux-armhf</include>
+                <include>gnu.io.rxtx:librxtxSerial-linux-armel</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>/gnu/io/impl/serial/</outputDirectory>
