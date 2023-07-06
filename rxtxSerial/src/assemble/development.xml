@@ -21,6 +21,8 @@
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
             <includes>
+                <include>gnu.io.rxtx:librxtxSerial-linux-armhf</include>
+                <include>gnu.io.rxtx:librxtxSerial-linux-armel</include>
                 <include>gnu.io.rxtx:rxtxSerial-*</include>
                 <include>gnu.io.rxtx:librxtxSerial-*</include>
             </includes>
