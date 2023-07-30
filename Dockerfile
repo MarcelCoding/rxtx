@@ -1,8 +1,8 @@
-FROM debian:latest
+FROM debian:bullseye
 
 RUN set -ex; \
     apt-get update; \
-    apt-get install -y --no-install-recommends ca-certificates wget tar; \
+    apt-get install -y --no-install-recommends ca-certificates wget tar gcc-multilib lsb-release; \
     rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME=/opt/java
@@ -22,7 +22,7 @@ RUN set -ex; \
 RUN set -ex; \
     dpkg --add-architecture i386; \
     apt-get update; \
-    apt-get install -y --no-install-recommends lsb-release gcc-multilib gcc gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf gcc-mingw-w64-i686 gcc-mingw-w64-x86-64; \
+    apt-get install -y --no-install-recommends gcc gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf libc6-dev-armel-cross libc6-dev-armhf-cross; \
     rm -rf /var/lib/apt/lists/*
 
 # mvn --batch-mode -Pwith-linux-x86,with-linux-x86_64,with-linux-armel,with-linux-armhf,with-windows-x86,with-windows-x86_64 package install --file pom.xml
