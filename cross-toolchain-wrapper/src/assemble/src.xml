@@ -24,6 +24,7 @@
                 <include>apple64</include>
                 <include>armel-linux</include>
                 <include>armhf-linux</include>
+                <include>aarch64-linux</include>
             </includes>
             <fileMode>0755</fileMode>
         </fileSet>

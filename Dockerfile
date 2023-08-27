@@ -17,12 +17,12 @@ ENV PATH=$MAVEN_HOME/bin:$PATH
 
 RUN set -ex; \
     mkdir -p $MAVEN_HOME; \
-    wget -c "https://dlcdn.apache.org/maven/maven-3/3.9.3/binaries/apache-maven-3.9.3-bin.tar.gz" -O - | tar -xz --strip-components=1 -C $MAVEN_HOME
+    wget -c "https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-bin.tar.gz" -O - | tar -xz --strip-components=1 -C $MAVEN_HOME
 
 RUN set -ex; \
     dpkg --add-architecture i386; \
     apt-get update; \
-    apt-get install -y --no-install-recommends gcc gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf libc6-dev-armel-cross libc6-dev-armhf-cross; \
+    apt-get install -y --no-install-recommends gcc gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf libc6-dev-armel-cross libc6-dev-armhf-cross gcc-aarch64-linux-gnu libc6-dev-arm64-cross ; \
     rm -rf /var/lib/apt/lists/*
 
-# mvn --batch-mode -Pwith-linux-x86,with-linux-x86_64,with-linux-armel,with-linux-armhf,with-windows-x86,with-windows-x86_64 package install --file pom.xml
+# mvn --batch-mode -Pwith-linux-x86,with-linux-x86_64,with-linux-armel,with-linux-armhf,with-linux-aarch64,with-windows-x86,with-windows-x86_64 package install --file pom.xml

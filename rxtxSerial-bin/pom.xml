@@ -112,6 +112,17 @@
             </dependencies>
         </profile>
         <profile>
+            <id>with-linux-aarch64</id>
+            <dependencies>
+                <dependency>
+                    <groupId>gnu.io.rxtx</groupId>
+                    <artifactId>librxtxSerial-linux-aarch64</artifactId>
+                    <type>so</type>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>with-windows-x86</id>
             <activation>
                 <property>
