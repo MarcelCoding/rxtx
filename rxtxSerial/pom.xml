@@ -4,13 +4,13 @@
     <groupId>gnu.io.rxtx</groupId>
     <artifactId>rxtxSerial</artifactId>
     <packaging>pom</packaging>
-    <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+    <version>2.2.0-development</version>
     <name>RXTX default serial driver</name>
     <url>http://rxtx.qbang.org</url>
     <parent>    
         <groupId>gnu.io.rxtx</groupId>
         <artifactId>rxtx-parent</artifactId>
-        <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+        <version>2.2.0-development<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
     </parent>
     <build>
         <plugins>

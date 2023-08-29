@@ -66,7 +66,11 @@ import gnu.io.UnsupportedCommOperationException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.TooManyListenersException;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -75,6 +79,31 @@ final class RXTXPort extends SerialPort {
     private static final Logger LOGGER =
             Logger.getLogger(RXTXPort.class.getName());
     private final DriverContext context;
+
+    private static final ConcurrentLinkedDeque<Byte> toLog = new ConcurrentLinkedDeque<>();
+
+    static {
+        final Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        System.out.printf("%02x", toLog.pop());
+                    } catch (NoSuchElementException ignored) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }
+            }
+        });
+
+        thread.setDaemon(true);
+        thread.start();
+    }
 
     /**
      * DSR flag
@@ -462,8 +491,20 @@ final class RXTXPort extends SerialPort {
 
     protected native void writeByte(int b, boolean i) throws IOException;
 
+    protected void writeByteIntercept(int b, boolean i) throws IOException {
+        writeByte(b, i);
+        toLog.add((byte) b);
+    }
+
     protected native void writeArray(byte b[], int off, int len, boolean i)
             throws IOException;
+
+    protected void writeArrayIntercept(byte b[], int off, int len, boolean i) throws IOException {
+        writeArray(b, off, len, i);
+        for (int index = off; index < (len + off); ++index) {
+            toLog.add(b[index]);
+        }
+    }
 
     protected native boolean nativeDrain(boolean i) throws IOException;
 
@@ -808,7 +849,7 @@ final class RXTXPort extends SerialPort {
                 if (fd == 0) {
                     throw new IOException();
                 }
-                writeByte(b, monThreadisInterrupted);
+                writeByteIntercept(b, monThreadisInterrupted);
             } finally {
                 synchronized (IOLockedMutex) {
                     IOLocked--;
@@ -831,7 +872,7 @@ final class RXTXPort extends SerialPort {
             }
             try {
                 waitForTheNativeCodeSilly();
-                writeArray(b, 0, b.length, monThreadisInterrupted);
+                writeArrayIntercept(b, 0, b.length, monThreadisInterrupted);
             } finally {
                 synchronized (IOLockedMutex) {
                     IOLocked--;
@@ -863,7 +904,7 @@ final class RXTXPort extends SerialPort {
             }
             try {
                 waitForTheNativeCodeSilly();
-                writeArray(send, 0, len, monThreadisInterrupted);
+                writeArrayIntercept(send, 0, len, monThreadisInterrupted);
             } finally {
                 synchronized (IOLockedMutex) {
                     IOLocked--;

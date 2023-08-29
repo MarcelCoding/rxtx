@@ -4,13 +4,13 @@
     <groupId>gnu.io.rxtx</groupId>
     <artifactId>rxtx-api</artifactId>
     <packaging>jar</packaging>
-    <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+    <version>2.2.0-development</version>
     <name>RXTX API</name>
     <url>http://rxtx.qbang.org</url>
     <parent>    
         <groupId>gnu.io.rxtx</groupId>
         <artifactId>rxtx-parent</artifactId>
-        <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+        <version>2.2.0-development</version>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

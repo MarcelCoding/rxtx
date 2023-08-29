@@ -4,13 +4,13 @@
     <groupId>gnu.io.rxtx</groupId>
     <artifactId>librxtxSerial-linux-aarch64</artifactId>
     <packaging>so</packaging>
-    <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+    <version>2.2.0-development</version>
     <name>[linux/aarch64] rxtxSerial</name>
     <url>http://rxtx.qbang.org</url>
     <parent>    
         <groupId>gnu.io.rxtx</groupId>
         <artifactId>rxtx-parent</artifactId>
-        <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+        <version>2.2.0-development</version>
     </parent>
     <profiles>
         <profile>
@@ -90,7 +90,7 @@
                                 <artifactItem>
                                     <groupId>gnu.io.rxtx</groupId>
                                     <artifactId>rxtxSerial-native</artifactId>
-                                    <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+                                    <version>2.2.0-development</version>
                                     <type>zip</type>
                                     <classifier>sources</classifier>
                                     <overWrite>true</overWrite>
@@ -111,7 +111,7 @@
                                 <artifactItem>
                                     <groupId>gnu.io.rxtx</groupId>
                                     <artifactId>rxtxSerial-java</artifactId>
-                                    <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+                                    <version>2.2.0-development</version>
                                     <type>zip</type>
                                     <classifier>jni-headers</classifier>
                                     <overWrite>true</overWrite>
@@ -132,7 +132,7 @@
                                 <artifactItem>
                                     <groupId>gnu.io.rxtx</groupId>
                                     <artifactId>cross-toolchain-wrapper</artifactId>
-                                    <version>${project.version}<!-- version calculated by maven-git-versioning-extension based on git tags --></version>
+                                    <version>2.2.0-development</version>
                                     <type>zip</type>
                                     <classifier>sources</classifier>
                                     <overWrite>true</overWrite>
