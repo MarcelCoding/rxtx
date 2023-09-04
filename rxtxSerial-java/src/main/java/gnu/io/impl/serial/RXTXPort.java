@@ -66,11 +66,9 @@ import gnu.io.UnsupportedCommOperationException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.TooManyListenersException;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,6 +88,7 @@ final class RXTXPort extends SerialPort {
                     try {
                         System.out.printf("%02x", toLog.pop());
                     } catch (NoSuchElementException ignored) {
+                        System.out.print("\n");
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
