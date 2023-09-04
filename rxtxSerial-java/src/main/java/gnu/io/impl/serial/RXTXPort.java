@@ -78,23 +78,38 @@ final class RXTXPort extends SerialPort {
             Logger.getLogger(RXTXPort.class.getName());
     private final DriverContext context;
 
-    private static final ConcurrentLinkedDeque<Byte> toLog = new ConcurrentLinkedDeque<>();
+    private static final ConcurrentLinkedDeque<Byte> writeToLog = new ConcurrentLinkedDeque<>();
+    private static final ConcurrentLinkedDeque<Byte> readToLog = new ConcurrentLinkedDeque<>();
 
     static {
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    try {
-                        System.out.printf("%02x", toLog.pop());
-                    } catch (NoSuchElementException ignored) {
-                        System.out.print("\n");
+                    if (writeToLog.size() + readToLog.size() == 0) {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
 
+                        continue;
+                    }
+
+                    if (writeToLog.size() > 0) {
+                        System.out.print("TX:");
+                        while (!writeToLog.isEmpty()) {
+                            System.out.printf("%02x", writeToLog.pop());
+                        }
+                        System.out.println();
+                    }
+
+                    if (readToLog.size() > 0) {
+                        System.out.print("RX:");
+                        while (!readToLog.isEmpty()) {
+                            System.out.printf("%02x", readToLog.pop());
+                        }
+                        System.out.println();
                     }
                 }
             }
@@ -492,7 +507,7 @@ final class RXTXPort extends SerialPort {
 
     protected void writeByteIntercept(int b, boolean i) throws IOException {
         writeByte(b, i);
-        toLog.add((byte) b);
+        writeToLog.add((byte) b);
     }
 
     protected native void writeArray(byte b[], int off, int len, boolean i)
@@ -501,7 +516,7 @@ final class RXTXPort extends SerialPort {
     protected void writeArrayIntercept(byte b[], int off, int len, boolean i) throws IOException {
         writeArray(b, off, len, i);
         for (int index = off; index < (len + off); ++index) {
-            toLog.add(b[index]);
+            writeToLog.add(b[index]);
         }
     }
 
@@ -511,11 +526,33 @@ final class RXTXPort extends SerialPort {
 
     protected native int readByte() throws IOException;
 
+    protected int readByteIntercept() throws IOException {
+        final int result = readByte();
+        readToLog.add((byte) result);
+        return result;
+    }
+
     protected native int readArray(byte b[], int off, int len)
             throws IOException;
 
+    protected int readArrayIntercept(byte b[], int off, int len) throws IOException {
+        final int result = readArray(b, off, len);
+        for (int index = off; index < (len + off); ++index) {
+            readToLog.add(b[index]);
+        }
+        return result;
+    }
+
     protected native int readTerminatedArray(byte b[], int off, int len, byte t[])
             throws IOException;
+
+    protected int readTerminatedArrayIntercept(byte b[], int off, int len, byte t[]) throws IOException {
+        final int result = readTerminatedArray(b, off, len, t);
+        for (int index = off; index < (len + off); ++index) {
+            readToLog.add(b[index]);
+        }
+        return result;
+    }
 
     /**
      * Process SerialPortEvents
@@ -966,7 +1003,7 @@ final class RXTXPort extends SerialPort {
             }
             try {
                 waitForTheNativeCodeSilly();
-                int result = readByte();
+                int result = readByteIntercept();
                 return result;
             } finally {
                 synchronized (IOLockedMutex) {
@@ -1070,7 +1107,7 @@ final class RXTXPort extends SerialPort {
             }
             try {
                 waitForTheNativeCodeSilly();
-                result = readArray(b, off, minimum);
+                result = readArrayIntercept(b, off, minimum);
                 return result;
             } finally {
                 synchronized (IOLockedMutex) {
@@ -1149,7 +1186,7 @@ final class RXTXPort extends SerialPort {
             }
             try {
                 waitForTheNativeCodeSilly();
-                result = readTerminatedArray(b, off, minimum, t);
+                result = readTerminatedArrayIntercept(b, off, minimum, t);
                 return result;
             } finally {
                 synchronized (IOLockedMutex) {
